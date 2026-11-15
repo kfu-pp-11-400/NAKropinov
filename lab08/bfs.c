@@ -87,7 +87,7 @@ static Graph read_graph(const char *filename, int undirected) {
     free(to);
     free(degree);
     free(cursor);
-    Graph graph = {n, arcs, offsets, edges};
+    Graph graph = {n, m, offsets, edges};
     return graph;
 }
 
@@ -300,7 +300,7 @@ int main(int argc, char **argv) {
         double speedup = sequential_time / parallel_time;
         double efficiency = speedup / (nprocs * omp_get_max_threads());
         printf("RESULT n=%d m=%d degree=%.3f source=%d directed=%d levels=%d seq_levels=%d unreachable=%d mismatches=%d mpi=%d omp=%d total=%d mode=%s schedule=%s seq=%.9f par=%.9f speedup=%.6f efficiency=%.6f comm=%.9f max_frontier=%d\n",
-               graph.n, graph.m, (double)graph.m / graph.n, source, !undirected,
+               graph.n, graph.m, (undirected ? 2.0 : 1.0) * graph.m / graph.n, source, !undirected,
                levels, seq_levels, unreachable, mismatches, nprocs,
                omp_get_max_threads(), nprocs * omp_get_max_threads(),
                sparse ? "sparse" : "dense", dynamic ? "dynamic" : "static",
